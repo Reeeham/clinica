@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --ring: 122 47 95;
+    color-scheme: light;
+  }
+
+  * {
+    @apply border-line;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-canvas text-ink antialiased;
+    font-feature-settings: "cv11", "ss01";
+    text-rendering: optimizeLegibility;
+  }
+
+  [dir="rtl"] body {
+    @apply font-arabic;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-ink;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--ring) / 0.55);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: #f0d9e5;
+    color: #4a1739;
+  }
+
+  /* Numbers must line up in every table and metric. */
+  table,
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+}
+
+@layer components {
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #d6cac4 transparent;
+  }
+
+  .scroll-thin::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+
+  .scroll-thin::-webkit-scrollbar-thumb {
+    background-color: #ded3ce;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background-clip: content-box;
+  }
+
+  .scroll-thin::-webkit-scrollbar-thumb:hover {
+    background-color: #cbbcb5;
+  }
+
+  /* Subtle paper grain that keeps large empty areas from feeling flat. */
+  .canvas-grain {
+    background-image: radial-gradient(rgba(29, 18, 25, 0.035) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  .divide-line > * + * {
+    border-top-width: 1px;
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden rounded bg-line/70;
+  }
+
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+    animation: shimmer 1.4s infinite;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .grid-lines {
+    background-image: linear-gradient(to bottom, #ebe3df 1px, transparent 1px);
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "clinica",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Clinica — SaaS platform for cosmetics clinics in Egypt. Clinic dashboard + client mobile app.",
+  "workspaces": [
+    "packages/*",
+    "apps/dashboard"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @clinica/dashboard",
+    "build": "npm run build --workspace @clinica/dashboard",
+    "lint": "npm run lint --workspace @clinica/dashboard",
+    "typecheck": "npm run typecheck --workspace @clinica/dashboard",
+    "mobile": "npm start --prefix apps/mobile"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "@supabase/ssr": "^0.12.5",
+    "@supabase/supabase-js": "^2.78.0",
+    "bcryptjs": "^3.0.3",
+    "prisma": "^6.19.3"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6"
+  }
+}

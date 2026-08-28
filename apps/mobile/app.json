@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Clinica",
+    "slug": "clinica-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "clinica",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#7A2F5F"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.clinica.mobile"
+    },
+    "android": {
+      "package": "com.clinica.mobile"
+    },
+    "plugins": ["expo-secure-store"]
+  }
+}
