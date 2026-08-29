@@ -1,11 +1,10 @@
 [build]
   command = "npm run build"
-  publish = "apps/dashboard"
+  publish = "apps/dashboard/.next"
 
 [build.environment]
   NODE_VERSION = "20"
   # Set NEXT_PUBLIC_API_URL in Netlify dashboard → Site settings → Environment variables
-  # Example: https://your-api-host.com/api
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
