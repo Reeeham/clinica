@@ -101,14 +101,20 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Auto-migrate + seed (only in Development)
-if (app.Environment.IsDevelopment())
+// Apply pending migrations on every boot. Seed only in Development or when
+// SEED_DATA=true is set explicitly (seeding is a no-op if a clinic exists).
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<ClinicaDbContext>();
     var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+
     await db.Database.MigrateAsync();
-    await DbSeeder.SeedAsync(db, hasher);
+
+    if (app.Environment.IsDevelopment() || builder.Configuration.GetValue<bool>("SEED_DATA"))
+    {
+        Log.Information("Seeding database");
+        await DbSeeder.SeedAsync(db, hasher);
+    }
 }
 
 if (app.Environment.IsDevelopment())
@@ -121,5 +127,6 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 
 app.Run();

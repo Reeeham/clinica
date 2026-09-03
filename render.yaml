@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: clinica-api
+    runtime: docker
+    region: frankfurt
+    plan: free
+    rootDir: apps/api
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_HTTP_PORTS
+        value: "8080"
+      - key: Jwt__Issuer
+        value: clinica
+      - key: Jwt__Audience
+        value: clinica-client
+      - key: Jwt__Secret
+        generateValue: true
+      - key: SEED_DATA
+        value: "false"
+      - key: ConnectionStrings__Default
+        sync: false
+      - key: Cors__AllowedOrigins__0
+        sync: false
