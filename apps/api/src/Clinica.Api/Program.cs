@@ -32,6 +32,7 @@ builder.Host.UseSerilog();
 var connectionString = builder.Configuration.GetConnectionString("Default");
 if (string.IsNullOrWhiteSpace(connectionString))
     throw new InvalidOperationException("ConnectionStrings:Default is not configured. Set the ConnectionStrings__Default environment variable on Render.");
+Log.Information("Connection string starts with: {Prefix}", connectionString.Length > 30 ? connectionString.Substring(0, 30) + "..." : connectionString);
 builder.Services.AddDbContext<ClinicaDbContext>(options =>
     options.UseNpgsql(connectionString));
 
