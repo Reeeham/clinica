@@ -29,8 +29,11 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // DbContext
+var connectionString = builder.Configuration.GetConnectionString("Default");
+if (string.IsNullOrWhiteSpace(connectionString))
+    throw new InvalidOperationException("ConnectionStrings:Default is not configured. Set the ConnectionStrings__Default environment variable on Render.");
 builder.Services.AddDbContext<ClinicaDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+    options.UseNpgsql(connectionString));
 
 // Auth
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
