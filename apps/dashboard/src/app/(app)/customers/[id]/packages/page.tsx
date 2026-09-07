@@ -5,7 +5,8 @@ import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
 import { CustomerDetailLayout } from "@/components/customers/CustomerDetailLayout";
-import { getCustomerDetail } from "@/lib/data";
+import { SellPackageModal } from "@/components/customers/SellPackageModal";
+import { getCustomerDetail, getPackages } from "@/lib/data";
 import { L } from "@/lib/i18n";
 import { entitlementStatusLabel } from "@clinica/core";
 
@@ -15,10 +16,20 @@ export default async function CustomerPackagesPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const detail = await getCustomerDetail(id);
+  const [detail, packagesData] = await Promise.all([
+    getCustomerDetail(id),
+    getPackages(),
+  ]);
   if (!detail) notFound();
 
   const { customer, bookings, entitlements } = detail;
+  const packages = packagesData.items.map((p) => ({
+    id: p.id,
+    nameEn: p.nameEn,
+    nameAr: p.nameAr,
+    price: p.price,
+    validityDays: p.validityDays,
+  }));
 
   return (
     <CustomerDetailLayout
@@ -28,6 +39,9 @@ export default async function CustomerPackagesPage({
       entitlementCount={entitlements.length}
       activeTab="packages"
     >
+      <div className="mb-4 flex justify-end">
+        <SellPackageModal customerId={id} packages={packages} />
+      </div>
       <Card>
         <CardHeader title="Packages & Entitlements" dense />
         {entitlements.length === 0 ? (

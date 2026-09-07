@@ -15,6 +15,7 @@ import {
   Users,
   Wallet,
   ClipboardCheck,
+  Building2,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
@@ -49,6 +50,7 @@ const NAV: { group: DictKey; items: NavItem[] }[] = [
     items: [
       { href: "/catalog", key: "nav.catalog", icon: Sparkles },
       { href: "/billing", key: "nav.billing", icon: Wallet },
+      { href: "/onboarding", key: "nav.onboarding", icon: Building2 },
       { href: "/settings", key: "nav.settings", icon: Settings2 },
     ],
   },

@@ -32,6 +32,7 @@ export function EmployeeFormModal() {
     salary: 0,
     commissionRate: 0,
     canLogin: false,
+    password: "",
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,7 +42,7 @@ export function EmployeeFormModal() {
       setForm({
         nameEn: "", nameAr: "", role: "therapist",
         titleEn: "", titleAr: "", phone: "", email: "",
-        salary: 0, commissionRate: 0, canLogin: false,
+        salary: 0, commissionRate: 0, canLogin: false, password: "",
       });
       setError(null);
     }
@@ -59,6 +60,10 @@ export function EmployeeFormModal() {
       setError("Name (English) and phone are required");
       return;
     }
+    if (form.canLogin && form.password.length < 6) {
+      setError("Password must be at least 6 characters when login is enabled");
+      return;
+    }
     setSaving(true);
     try {
       const result = await createEmployeeAction({
@@ -73,6 +78,7 @@ export function EmployeeFormModal() {
         commissionRate: form.commissionRate,
         specialties: [],
         canLogin: form.canLogin,
+        password: form.canLogin ? form.password : undefined,
       });
       if (!result.ok) {
         setError(result.error ?? "Failed to create staff member");
@@ -146,6 +152,16 @@ export function EmployeeFormModal() {
             <span className="text-sm text-ink-3">Allow dashboard access</span>
           </label>
         </Field>
+        {form.canLogin ? (
+          <Field label="Password" required hint="Minimum 6 characters">
+            <Input
+              type="password"
+              value={form.password}
+              onChange={e => setForm({ ...form, password: e.target.value })}
+              placeholder="••••••••"
+            />
+          </Field>
+        ) : null}
       </div>
     </Modal>
   );

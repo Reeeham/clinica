@@ -204,3 +204,29 @@ export async function deleteSessionAction(id: string) {
     return { ok: false, error: e.message ?? "Failed to delete session" };
   }
 }
+
+// ── Onboarding (create new clinic + owner) ──
+
+export async function createClinicAction(body: Record<string, unknown>) {
+  const token = await authToken();
+  try {
+    await apiPost(`/onboarding/create-clinic`, body, token);
+    return { ok: true };
+  } catch (e: any) {
+    return { ok: false, error: e.message ?? "Failed to create clinic" };
+  }
+}
+
+// ── Sell package to customer ──
+
+export async function purchasePackageAction(customerId: string, packageId: string) {
+  const token = await authToken();
+  try {
+    await apiPost(`/customers/purchase-package`, { customerId, packageId }, token);
+    revalidatePath(`/customers/${customerId}`);
+    revalidatePath(`/customers/${customerId}/packages`);
+    return { ok: true };
+  } catch (e: any) {
+    return { ok: false, error: e.message ?? "Failed to sell package" };
+  }
+}
