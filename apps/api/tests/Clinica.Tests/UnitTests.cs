@@ -111,7 +111,7 @@ public class ValidatorTests
             "Dr. Sara", "د. سارة", EmployeeRole.Doctor,
             "Dermatologist", "طبيبة جلدية", "01002345678", "sara@nour-aesthetics.com",
             2500000, 0.15, ["skin", "injectables"],
-            "#2B5FA8", "SM", true);
+            "#2B5FA8", "SM", true, "demo1234");
         var result = validator.TestValidate(dto);
         result.ShouldNotHaveAnyValidationErrors();
     }
@@ -123,7 +123,7 @@ public class ValidatorTests
         var dto = new CreateEmployeeDto(
             "Dr. Sara", "د. سارة", EmployeeRole.Doctor,
             "Dermatologist", "طبيبة جلدية", "01002345678", "sara@nour-aesthetics.com",
-            2500000, 1.5, [], null, null, false);
+            2500000, 1.5, [], null, null, false, null);
         var result = validator.TestValidate(dto);
         result.ShouldHaveValidationErrorFor(x => x.CommissionRate);
     }

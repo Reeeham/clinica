@@ -23,11 +23,11 @@ public record CreateEmployeeDto(
     string NameEn, string NameAr, EmployeeRole Role,
     string TitleEn, string TitleAr, string Phone, string Email,
     long Salary, double CommissionRate, string[]? Specialties,
-    string? Color, string? Initials, bool CanLogin);
+    string? Color, string? Initials, bool CanLogin, string? Password);
 
 public record UpdateEmployeeDto(
     string? NameEn, string? NameAr, string? Phone, string? Email,
-    double? CommissionRate, long? Salary, bool? CanLogin);
+    double? CommissionRate, long? Salary, bool? CanLogin, string? Password);
 
 public record CreateServiceDto(
     string NameEn, string NameAr, ServiceCategory Category,
@@ -80,3 +80,15 @@ public record UpdateSessionRecordDto(
     string[]? Areas, string? ParametersJson,
     string? OutcomeEn, string? OutcomeAr, string? Reaction,
     int? Satisfaction, DateTime? NextDueAt, string? Notes);
+
+public record PurchasePackageDto(Guid CustomerId, Guid PackageId);
+
+public record CreateClinicDto(
+    string Slug, string NameEn, string NameAr,
+    string TaglineEn, string TaglineAr,
+    string Phone, string Whatsapp,
+    string CityEn, string CityAr, string AreaEn, string AreaAr,
+    string AddressEn, string AddressAr,
+    string OwnerNameEn, string OwnerNameAr,
+    string OwnerEmail, string OwnerPhone,
+    string OwnerPassword);

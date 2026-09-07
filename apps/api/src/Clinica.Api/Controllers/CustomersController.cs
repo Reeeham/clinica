@@ -5,6 +5,7 @@ using Clinica.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace Clinica.Api.Controllers;
 
@@ -81,15 +82,15 @@ public class CustomersController : ControllerBase
             .FirstOrDefaultAsync(c => c.Id == id && c.ClinicId == ClinicId);
         if (c == null) return NotFound();
 
-        var completedBookings = c.Bookings.Where(b => b.Status == BookingStatus.Completed).Count();
-        var lastVisit = c.Bookings
-            .Where(b => b.Status == BookingStatus.Completed)
-            .Max(b => (DateTime?)b.StartsAt);
+        var completedBookings = c.Bookings.Where(b => b.Status == BookingStatus.Completed).ToList();
+        var visits = completedBookings.Count;
+        var lastVisit = completedBookings.Max(b => (DateTime?)b.StartsAt);
         var nextVisit = c.Bookings
             .Where(b => b.Status == BookingStatus.Confirmed || b.Status == BookingStatus.Pending)
             .Min(b => (DateTime?)b.StartsAt);
         var noShows = c.Bookings.Count(b => b.Status == BookingStatus.NoShow);
         var activePackages = c.Entitlements.Count(e => e.Status == EntitlementStatus.Active);
+        var lifetimeValue = completedBookings.Sum(b => b.Price);
 
         return Ok(new
         {
@@ -101,11 +102,12 @@ public class CustomersController : ControllerBase
                 c.Active, c.CreatedAt, c.Color, c.Initials),
             stats = new
             {
-                visits = completedBookings,
+                visits,
                 lastVisit,
                 nextVisit,
                 noShows,
                 activePackages,
+                lifetimeValue,
             },
             bookings = c.Bookings
                 .OrderByDescending(b => b.StartsAt)
@@ -202,5 +204,45 @@ public class CustomersController : ControllerBase
         c.DeactivatedAt = null;
         await _db.SaveChangesAsync();
         return NoContent();
+    }
+
+    [HttpPost("purchase-package")]
+    public async Task<ActionResult> PurchasePackage([FromBody] PurchasePackageDto dto)
+    {
+        var customer = await _db.Customers.FirstOrDefaultAsync(c => c.Id == dto.CustomerId && c.ClinicId == ClinicId);
+        if (customer == null) return NotFound(new { error = "Customer not found" });
+
+        var pkg = await _db.Packages
+            .Include(p => p.Items)
+            .FirstOrDefaultAsync(p => p.Id == dto.PackageId && p.ClinicId == ClinicId);
+        if (pkg == null) return NotFound(new { error = "Package not found" });
+
+        var balance = pkg.Items.Select(i => new { serviceId = i.ServiceId, remaining = i.Sessions }).ToList();
+        var entitlement = new Entitlement
+        {
+            Id = Guid.NewGuid(),
+            ClinicId = ClinicId,
+            CustomerId = dto.CustomerId,
+            PackageId = pkg.Id,
+            PurchasedAt = DateTime.UtcNow,
+            ExpiresAt = DateTime.UtcNow.AddDays(pkg.ValidityDays),
+            Status = EntitlementStatus.Active,
+            BalanceJson = JsonSerializer.Serialize(balance),
+        };
+
+        pkg.SoldCount++;
+
+        _db.Entitlements.Add(entitlement);
+        await _db.SaveChangesAsync();
+
+        return Ok(new
+        {
+            entitlementId = entitlement.Id,
+            packageId = pkg.Id,
+            packageEn = pkg.NameEn,
+            packageAr = pkg.NameAr,
+            expiresAt = entitlement.ExpiresAt,
+            balance,
+        });
     }
 }

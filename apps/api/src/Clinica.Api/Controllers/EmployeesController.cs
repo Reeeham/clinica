@@ -1,6 +1,7 @@
 using Clinica.Application.DTOs;
 using Clinica.Domain.Entities;
 using Clinica.Domain.Enums;
+using Clinica.Infrastructure.Auth;
 using Clinica.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,12 @@ namespace Clinica.Api.Controllers;
 public class EmployeesController : ControllerBase
 {
     private readonly ClinicaDbContext _db;
-    public EmployeesController(ClinicaDbContext db) => _db = db;
+    private readonly IPasswordHasher _passwordHasher;
+    public EmployeesController(ClinicaDbContext db, IPasswordHasher passwordHasher)
+    {
+        _db = db;
+        _passwordHasher = passwordHasher;
+    }
 
     private Guid ClinicId => Guid.Parse(User.FindFirst("clinicId")!.Value);
 
@@ -99,6 +105,9 @@ public class EmployeesController : ControllerBase
             Initials = dto.Initials ?? dto.NameEn[..2].ToUpper(),
             Rating = 0,
             CanLogin = dto.CanLogin,
+            PasswordHash = dto.CanLogin && !string.IsNullOrEmpty(dto.Password)
+                ? _passwordHasher.HashPassword(dto.Password)
+                : null,
         };
 
         _db.Employees.Add(emp);
@@ -125,6 +134,8 @@ public class EmployeesController : ControllerBase
         if (dto.CommissionRate.HasValue) e.CommissionRate = dto.CommissionRate.Value;
         if (dto.Salary.HasValue) e.Salary = dto.Salary.Value;
         if (dto.CanLogin.HasValue) e.CanLogin = dto.CanLogin.Value;
+        if (!string.IsNullOrEmpty(dto.Password) && e.CanLogin)
+            e.PasswordHash = _passwordHasher.HashPassword(dto.Password);
 
         await _db.SaveChangesAsync();
 

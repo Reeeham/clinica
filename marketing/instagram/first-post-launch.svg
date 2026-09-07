@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7A2F5F"/>
+      <stop offset="1" stop-color="#5A1F44"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E6C290"/>
+      <stop offset="1" stop-color="#D4A574"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+
+  <!-- decorative glow -->
+  <circle cx="900" cy="160" r="360" fill="#ffffff" opacity="0.05"/>
+  <circle cx="160" cy="940" r="280" fill="#000000" opacity="0.07"/>
+
+  <!-- top brand row -->
+  <g transform="translate(90 96)">
+    <path d="M52 24 a26 26 0 1 0 0 36" fill="none" stroke="url(#gold)" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="52" cy="42" r="6" fill="url(#gold)"/>
+    <text x="92" y="52" font-family="ui-sans-serif, system-ui, sans-serif" font-size="34" font-weight="700" letter-spacing="2" fill="#ffffff">CLINICA</text>
+  </g>
+
+  <!-- headline -->
+  <text x="90" y="330" font-family="ui-sans-serif, system-ui, sans-serif" font-size="86" font-weight="800" fill="#ffffff">Book your next</text>
+  <text x="90" y="430" font-family="ui-sans-serif, system-ui, sans-serif" font-size="86" font-weight="800" fill="url(#gold)">glow-up in seconds.</text>
+
+  <!-- subhead -->
+  <text x="92" y="500" font-family="ui-sans-serif, system-ui, sans-serif" font-size="34" font-weight="500" fill="#f0d9e5">Egypt's app for cosmetics &amp; aesthetics clinics.</text>
+
+  <!-- feature cards -->
+  <g font-family="ui-sans-serif, system-ui, sans-serif" fill="#ffffff">
+    <g transform="translate(90 560)">
+      <rect width="290" height="200" rx="24" fill="url(#card)"/>
+      <text x="28" y="74" font-size="44">🔍</text>
+      <text x="28" y="128" font-size="30" font-weight="700">Discover</text>
+      <text x="28" y="166" font-size="22" fill="#e9d9e2">Verified clinics</text>
+      <text x="28" y="192" font-size="22" fill="#e9d9e2">near you</text>
+    </g>
+    <g transform="translate(395 560)">
+      <rect width="290" height="200" rx="24" fill="url(#card)"/>
+      <text x="28" y="74" font-size="44">📅</text>
+      <text x="28" y="128" font-size="30" font-weight="700">Book</text>
+      <text x="28" y="166" font-size="22" fill="#e9d9e2">Sessions, packages</text>
+      <text x="28" y="192" font-size="22" fill="#e9d9e2">&amp; offers</text>
+    </g>
+    <g transform="translate(700 560)">
+      <rect width="290" height="200" rx="24" fill="url(#card)"/>
+      <text x="28" y="74" font-size="44">💳</text>
+      <text x="28" y="128" font-size="30" font-weight="700">Pay</text>
+      <text x="28" y="166" font-size="22" fill="#e9d9e2">Secure in-app</text>
+      <text x="28" y="192" font-size="22" fill="#e9d9e2">payments</text>
+    </g>
+  </g>
+
+  <!-- CTA -->
+  <g transform="translate(90 820)">
+    <rect width="440" height="86" rx="43" fill="url(#gold)"/>
+    <text x="220" y="56" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="32" font-weight="800" fill="#5A1F44">Download the app →</text>
+  </g>
+  <text x="90" y="960" font-family="ui-sans-serif, system-ui, sans-serif" font-size="26" fill="#e9d9e2">Available on iOS &amp; Android · Made in Egypt 🇪🇬</text>
+</svg>
